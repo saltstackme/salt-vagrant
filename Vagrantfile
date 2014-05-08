@@ -5,15 +5,6 @@
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-
-  config.vm.define "master-init" do |master|
-    master.vm.box = "trusty"
-    master.vm.host_name = "master-init"
-    master.vm.network :private_network, ip: "192.168.56.101"
-    master.vm.network "public_network", :bridge => 'en0: Ethernet (AirPort)'
-    master.vm.provision "shell",
-      inline: "curl -L http://bootstrap.saltstack.org | sudo sh -s -- -M git v2014.1.3"
-  end
   
   config.vm.define "mighty" do |master|
     master.vm.box = "trusty"
@@ -44,7 +35,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     minion.vm.network "public_network", :bridge => 'en0: Ethernet (AirPort)'
     minion.vm.provision :salt do |salt|
       salt.run_highstate = true
+
       salt.minion_config = "./salt/minion"
+
       salt.minion_key = "./salt/minion.pem"
       salt.minion_pub = "./salt/minion.pub"
     end 
