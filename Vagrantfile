@@ -26,6 +26,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       salt.master_key = "salt/master.pem"
       salt.master_pub = "salt/master.pub"      
     end
+
+    master.vm.provision "shell", path: "scripts/provison.sh"
+
   end
 
   config.vm.define "saltmaster" do |minion|    
