@@ -27,7 +27,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       salt.master_pub = "salt/master.pub"      
     end
 
-    master.vm.provision "shell", path: "scripts/provison.sh"
+    master.vm.provision "shell", path: "scripts/provision.sh"
 
   end
 
