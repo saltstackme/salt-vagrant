@@ -1,2 +1,3 @@
 Host github.com
     StrictHostKeyChecking no
+    IdentityFile ~/.ssh/id_rsa
