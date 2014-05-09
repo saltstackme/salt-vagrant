@@ -38,9 +38,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       source: "etc/ssh-config",
       destination: "~/.ssh/config"
 
-    # various actions to get ready for masterless minion execution
-    master.vm.provision "shell", path: "scripts/provision.sh"
-
     # copy my private key so I can checkout from private repo
     master.vm.provision "file", 
       source: "~/.ssh/id_rsa", 
@@ -51,7 +48,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       source: "~/.ssh/id_rsa.pub",
       destination: "~/.ssh/id_rsa.pub"
 
-    # create a temporart minion configuration for masterless execution
+    # various actions to get ready for masterless minion execution
+    master.vm.provision "shell", path: "scripts/provision.sh", privileged: false
+
+    # create a temporary minion configuration for masterless execution
     master.vm.provision "file", 
       source: "salt/minion-masterless",
       destination: "/tmp/salt/minion"

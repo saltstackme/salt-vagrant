@@ -1,6 +1,3 @@
-echo 'reload bash profile'
-source ~/.bash_profile
-
 echo 'changing ownership of /srv'
 sudo chown vagrant:vagrant /srv
 
