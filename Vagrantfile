@@ -1,6 +1,8 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
+require_relative '../sandbox_data'
+
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
 
@@ -40,16 +42,31 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # copy my private key so I can checkout from private repo
     master.vm.provision "file", 
-      source: "~/.ssh/id_rsa", 
+      source: "#{HOME}/.ssh/id_rsa", 
       destination: "~/.ssh/id_rsa"
 
     # copy my public key
     master.vm.provision "file", 
-      source: "~/.ssh/id_rsa.pub",
+      source: "#{HOME}/.ssh/id_rsa.pub",
       destination: "~/.ssh/id_rsa.pub"
 
     # various actions to get ready for masterless minion execution
-    master.vm.provision "shell", path: "scripts/provision.sh", privileged: false
+    #master.vm.provision "shell", path: "scripts/provision.sh", privileged: false
+
+    # change ownership of /srv to vagrant 
+    master.vm.provision "shell", inline: "chown vagrant:vagrant /srv"
+
+    # ensure git is installed
+    master.vm.provision "shell", inline: "apt-get install git -y"
+
+    # clone salt-sandbox environment
+    master.vm.provision "shell", inline: "git clone git@github.com:rackerlabs/salt-sandbox.git /srv/salt-sandbox", privileged: false
+
+    # set github username
+    master.vm.provision "shell", inline: "git config --global user.name #{GITHUB_USERNAME}", privileged: false
+
+    # set github e-mail address
+    master.vm.provision "shell", inline: "git config --global user.email #{GITHUB_EMAIL}", privileged: false
 
     # create a temporary minion configuration for masterless execution
     master.vm.provision "file", 
