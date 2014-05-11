@@ -1,7 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-require_relative '../sandbox_config'
+require_relative 'sandbox_config'
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
@@ -12,13 +12,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     v.gui = false
   end
 
-  config.vm.define "sandbox" do |master|
+  config.vm.define "#{USERNAME}-#{INSTANCE_NAME}" do |master|
     master.vm.box = "trusty"
-    master.vm.host_name = "salt-sandbox"
+    master.vm.host_name = "#{USERNAME}-#{instance}"
     master.vm.network :private_network, ip: "192.168.56.100"
     #master.vm.network "public_network", :bridge => 'en0: Ethernet (AirPort)'
 
-    # install salt-master, salt-minon
+    # install salt-master, salt-minon    
     master.vm.provision :salt do |salt|
       # see options here: https://github.com/saltstack/salty-vagrant/blob/develop/example/complete/Vagrantfile
 

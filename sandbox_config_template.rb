@@ -8,7 +8,10 @@
 # private and public keys to sandbox
 HOME = "/home/myuser"
 
-# username
+# username, also used to define sandbox environment
+# if vagrant is going to be used to provision cloud servers
+# USERNAME has to be unique under the same cloud account
+# to prevent possible name collusions
 USERNAME = ""
 
 # username to use for commits
@@ -17,5 +20,8 @@ GITHUB_USERNAME = ""
 # e-mail address to use for commits
 GITHUB_EMAIL = ""
 
+# sandbox instance names
+# list of strings
+INSTANCE_NAMES = ["master1","master2"]
 
 
