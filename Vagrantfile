@@ -14,7 +14,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.define "#{USERNAME}-#{INSTANCE_NAME}" do |master|
     master.vm.box = "trusty"
-    master.vm.host_name = master
+    master.vm.host_name = "#{USERNAME}-#{INSTANCE_NAME}"
     master.vm.network :private_network, ip: "192.168.56.100"
     #master.vm.network "public_network", :bridge => 'en0: Ethernet (AirPort)'
 
