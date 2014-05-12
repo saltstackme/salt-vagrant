@@ -20,8 +20,7 @@ GITHUB_USERNAME = ""
 # e-mail address to use for commits
 GITHUB_EMAIL = ""
 
-# sandbox instance names
-# list of strings
-INSTANCE_NAMES = ["master1","master2"]
+# sandbox instance name
+INSTANCE_NAME = "master1"
 
 
