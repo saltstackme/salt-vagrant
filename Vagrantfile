@@ -8,13 +8,18 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  config.vm.provider "virtualbox" do |v|
-    v.gui = false
-    override.vm.box = "trusty"
-    $dest = "~"
+  if PROVIDER == "rackspace"
+    DEST = "/root"
+  else
+    DEST = "~"
   end
 
-  config.vm.provider :rackspace do |rs|
+  config.vm.provider "virtualbox" do |v, override|
+    v.gui = false
+    override.vm.box = "trusty"
+  end
+
+  config.vm.provider :rackspace do |rs, override|
     rs.username        = "#{RACKSPACE_USER}"
     rs.api_key         = "#{RACKSPACE_KEY}"
     rs.flavor          = /1 GB Performance/
@@ -22,17 +27,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     rs.rackspace_region= :iad
     rs.public_key_path = "/root/.ssh/id_rsa.pub"
     override.vm.box = "dummy"
-    $dest = "/root"
+    override.ssh.private_key_path = "/root/.ssh/id_rsa"
   end
 
   config.vm.define "#{PREFIX}-#{INSTANCE_NAME}" do |master|
     master.vm.host_name = "#{PREFIX}-#{INSTANCE_NAME}"
     
-    if $provider == 'rackspace'
-      master.ssh.private_key_path = "/root/.ssh/id_rsa"
-    else
-      master.vm.network :private_network, ip: "192.168.56.100"
-    end
+    #master.vm.network :private_network, ip: "192.168.56.100"
 
     # install salt-master, salt-minon    
     master.vm.provision :salt do |salt|
@@ -54,23 +55,22 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # disable StrictHostKeyChecking for github
     master.vm.provision "file",
       source: "etc/ssh-config",
-      destination: "#{$dest}/.ssh/config"
+      destination: "#{DEST}/.ssh/config"
 
     # copy my private key so I can checkout from private repo
     master.vm.provision "file", 
       source: "#{HOME}/.ssh/id_rsa", 
-      destination: "#{$dest}/.ssh/id_rsa"
+      destination: "#{DEST}/.ssh/id_rsa"
 
     # copy my public key
     master.vm.provision "file", 
       source: "#{HOME}/.ssh/id_rsa.pub",
-      destination: "#{$dest}/.ssh/id_rsa.pub"
-
-    # various actions to get ready for masterless minion execution
-    #master.vm.provision "shell", path: "scripts/provision.sh", privileged: false
+      destination: "#{DEST}/.ssh/id_rsa.pub"
 
     # change ownership of /srv to vagrant 
-    master.vm.provision "shell", inline: "chown vagrant:vagrant /srv"
+    if PROVIDER == "virtualbox"
+      master.vm.provision "shell", inline: "chown vagrant:vagrant /srv"
+    end
 
     # ensure git is installed
     master.vm.provision "shell", inline: "apt-get install git -y"

@@ -4,6 +4,7 @@
 # creating the server
 
 VAGRANT_SERVER="ip address here"
+PROVIDER="rackspace or virtualbox"
 CURRENT_HOME="folder where id_rsa(pub) are"
 VAGRANT_HOME="home folder on vagrant server"
 PREFIX="your initials?"
@@ -52,6 +53,7 @@ git clone https://github.com/ozgurakan/salt-vagrant.git /root/vagrant
 
 cat <<CONFIGEOF > "/root/vagrant/config.rb"
 # sandbox specific variables
+PROVIDER = "${PROVIDER}"
 HOME = "${VAGRANT_HOME}"
 PREFIX = "${PREFIX}"
 GITHUB_USERNAME = "${GITHUB_USERNAME}"
