@@ -47,10 +47,10 @@ cp /root/vagrant/config_template.rb /root/vagrant/config.rb
 cd /root/vagrant
 vagrant box add dummy https://github.com/mitchellh/vagrant-rackspace/raw/master/dummy.box
 
-cat <<CONFIGEOF > "/root/vagrant/sandbox_config.rb"
+cat <<CONFIGEOF > "/root/vagrant/config.rb"
 # sandbox specific variables
 HOME = ${HOME}
-USERNAME = ${USERNAME}
+PREFIX = ${PREFIX}
 GITHUB_USERNAME = ${GITHUB_USERNAME}
 GITHUB_EMAIL = ${GITHUB_EMAIL}
 INSTANCE_NAME = ${INSTANCE_NAME}
