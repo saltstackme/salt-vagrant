@@ -8,7 +8,7 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  puts "#{USERNAME}-#{INSTANCE_NAME}"
+  puts "#{PREFIX}-#{INSTANCE_NAME}"
 
   config.ssh.private_key_path = "/root/.ssh/id_rsa"
 
@@ -21,7 +21,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     rs.public_key_path = "/root/.ssh/id_rsa.pub"
   end
 
-  config.vm.define "#{USERNAME}-#{INSTANCE_NAME}" do |master|
+  config.vm.define "#{PREFIX}-#{INSTANCE_NAME}" do |master|
     master.vm.box = "dummy"
     master.vm.host_name = "salt-master"
 
