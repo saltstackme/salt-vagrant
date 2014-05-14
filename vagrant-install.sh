@@ -4,7 +4,7 @@
 # creating the server
 
 VAGRANT_SERVER="ip address here"
-HOME="/root/"
+HOME="home folder where id_rsa and id_rsa.pub is"
 PREFIX="your initials?"
 INSTANCE_NAME="salt-mastet maybe?"
 GITHUB_USERNAME="username"
@@ -16,7 +16,7 @@ RACKSPACE_REGION="iad maybe?"
 echo "VAGRANT_SERVER IP ADDRESS: $VAGRANT_SERVER"
 
 echo "\nCopying SSH keys\n---------------"
-scp ~/.ssh/id_rsa* root@${VAGRANT_SERVER}:/root/.ssh/
+scp ${HOME}/.ssh/id_rsa* root@${VAGRANT_SERVER}:/root/.ssh/
 
 echo "\nInstalling Vagrant\n-------------"
 ssh root@${VAGRANT_SERVER} <<EOF
@@ -35,6 +35,7 @@ apt-get install vagrant -y
 echo
 echo == Installing rackspace plugin, this may take a while
 vagrant plugin install vagrant-rackspace
+
 echo
 echo == Installation Complete
 
@@ -43,21 +44,21 @@ echo == Configuring Vagrant Environment
 rm -rf /root/vagrant
 mkdir /root/vagrant
 git clone https://github.com/ozgurakan/salt-vagrant.git /root/vagrant
-cp /root/vagrant/config_template.rb /root/vagrant/config.rb
-cd /root/vagrant
-vagrant box add dummy https://github.com/mitchellh/vagrant-rackspace/raw/master/dummy.box
 
 cat <<CONFIGEOF > "/root/vagrant/config.rb"
 # sandbox specific variables
-HOME = ${HOME}
-PREFIX = ${PREFIX}
-GITHUB_USERNAME = ${GITHUB_USERNAME}
-GITHUB_EMAIL = ${GITHUB_EMAIL}
-INSTANCE_NAME = ${INSTANCE_NAME}
-RACKSPACE_USER = ${RACKSPACE_USER}
-RACKSPACE_KEY = ${RACKSPACE_KEY}
-RACKSPACE_REGION = ${RACKSPACE_REGION}
+HOME = "${HOME}"
+PREFIX = "${PREFIX}"
+GITHUB_USERNAME = "${GITHUB_USERNAME}"
+GITHUB_EMAIL = "${GITHUB_EMAIL}"
+INSTANCE_NAME = "${INSTANCE_NAME}"
+RACKSPACE_USER = "${RACKSPACE_USER}"
+RACKSPACE_KEY = "${RACKSPACE_KEY}"
+RACKSPACE_REGION = "${RACKSPACE_REGION}"
 CONFIGEOF
+
+cd /root/vagrant
+vagrant box add dummy https://github.com/mitchellh/vagrant-rackspace/raw/master/dummy.box
 
 echo
 echo == Logging into VAgrant Server: $VAGRANT_SERVER
