@@ -1,0 +1,88 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+require_relative 'config'
+
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  puts "#{USERNAME}-#{INSTANCE_NAME}"
+
+  config.ssh.private_key_path = "/root/.ssh/id_rsa"
+
+  config.vm.provider :rackspace do |rs|
+    rs.username        = "#{RACKSPACE_USER}"
+    rs.api_key         = "#{RACKSPACE_KEY}"
+    rs.flavor          = /1 GB Performance/
+    rs.image           = /Ubuntu/
+    rs.rackspace_region= :iad
+    rs.public_key_path = "/root/.ssh/id_rsa.pub"
+  end
+
+  config.vm.define "#{USERNAME}-#{INSTANCE_NAME}" do |master|
+    master.vm.box = "dummy"
+    master.vm.host_name = "salt-master"
+
+    # install salt-master, salt-minon    
+    master.vm.provision :salt do |salt|
+      # see options here: https://github.com/saltstack/salty-vagrant/blob/develop/example/complete/Vagrantfile
+
+      salt.install_master = true
+      salt.install_type = "stable"
+    
+      salt.minion_config = "salt/minion"
+      salt.master_config = "salt/master"
+
+      salt.minion_key = "salt/minion.pem"
+      salt.minion_pub = "salt/minion.pub"
+
+      salt.master_key = "salt/master.pem"
+      salt.master_pub = "salt/master.pub"      
+    end
+
+    # disable StrictHostKeyChecking for github
+    master.vm.provision "file",
+      source: "etc/ssh-config",
+      destination: "/root/.ssh/config"
+
+    # copy my private key so I can checkout from private repo
+    master.vm.provision "file", 
+      source: "/root/.ssh/id_rsa", 
+      destination: "/root/.ssh/id_rsa"
+
+    # copy my public key
+    master.vm.provision "file", 
+      source: "/root/.ssh/id_rsa.pub",
+      destination: "/root/.ssh/id_rsa.pub"
+
+    # various actions to get ready for masterless minion execution
+    #master.vm.provision "shell", path: "scripts/provision.sh", privileged: false
+
+    # change ownership of /srv to vagrant 
+    #master.vm.provision "shell", inline: "chown vagrant:vagrant /srv"
+
+    # ensure git is installed
+    master.vm.provision "shell", inline: "apt-get install git -y"
+
+    # clone salt-sandbox environment
+    master.vm.provision "shell", inline: "git clone git@github.com:rackerlabs/salt-sandbox.git /srv/salt-sandbox", privileged: true
+
+    # set github username
+    master.vm.provision "shell", inline: "git config --global user.name #{GITHUB_USERNAME}", privileged: true
+
+    # set github e-mail address
+    master.vm.provision "shell", inline: "git config --global user.email #{GITHUB_EMAIL}", privileged: true
+
+    # create a temporary minion configuration for masterless execution
+    master.vm.provision "file", 
+      source: "salt/minion-masterless",
+      destination: "/tmp/salt/minion"
+
+    # run salt-sandbox formulas to configure salt-master
+    master.vm.provision "shell", inline: "salt-call --local -c /tmp/salt state.highstate"
+
+  end
+
+end
