@@ -22,19 +22,19 @@ echo "\nInstalling Vagrant\n-------------"
 ssh root@${VAGRANT_SERVER} <<EOF
 echo
 echo == Updating repo
-#apt-get update
+apt-get update
 
 echo
 echo == Installing required libraries
-#apt-get install ruby-dev build-essential automake libtool emacs24-nox git screen -y
+apt-get install ruby-dev build-essential automake libtool emacs24-nox git screen -y
 
 echo
 echo == Installing Vagrant
-#apt-get install vagrant -y
+apt-get install vagrant -y
 
 echo
 echo == Installing rackspace plugin, this may take a while
-#vagrant plugin install vagrant-rackspace
+vagrant plugin install vagrant-rackspace
 echo
 echo == Installation Complete
 
@@ -43,7 +43,7 @@ echo == Configuring Vagrant Environment
 rm -rf /root/vagrant
 mkdir /root/vagrant
 git clone https://github.com/ozgurakan/salt-vagrant.git /root/vagrant
-cp /root/vagrant/sandbox_config_template.rb /root/vagrant/sandbox_config.rb
+cp /root/vagrant/config_template.rb /root/vagrant/config.rb
 cd /root/vagrant
 vagrant box add dummy https://github.com/mitchellh/vagrant-rackspace/raw/master/dummy.box
 
