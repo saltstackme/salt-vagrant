@@ -4,7 +4,8 @@
 # creating the server
 
 VAGRANT_SERVER="ip address here"
-HOME="home folder where id_rsa and id_rsa.pub is"
+KEYS_FOLDER = "folder where id_rsa(pub) are"
+HOME="home folder"
 PREFIX="your initials?"
 INSTANCE_NAME="salt-mastet maybe?"
 GITHUB_USERNAME="username"
