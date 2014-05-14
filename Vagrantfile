@@ -29,10 +29,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     master.vm.host_name = "#{PREFIX}-#{INSTANCE_NAME}"
     
     if $provider == 'rackspace'
-      master.vm.box = "dummy"
       master.ssh.private_key_path = "/root/.ssh/id_rsa"
     else
-      master.vm.box = "trusty"
       master.vm.network :private_network, ip: "192.168.56.100"
     end
 
