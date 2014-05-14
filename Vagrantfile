@@ -8,15 +8,9 @@ VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
-  if ARGV[1] == 'rackspace'
-      ARGV.delete_at(1)
-      provider = 'rackspace'
-  else
-      provider = 'virtualbox'
-  end
-  
   config.vm.provider "virtualbox" do |v|
     v.gui = false
+    $dest = "~"
   end
 
   config.vm.provider :rackspace do |rs|
@@ -26,17 +20,20 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     rs.image           = /Ubuntu/
     rs.rackspace_region= :iad
     rs.public_key_path = "/root/.ssh/id_rsa.pub"
-  end
-
-  if provider == 'rackspace'
-    config.ssh.private_key_path = "/root/.ssh/id_rsa"
+    $provider = 'rackspace'
+    $dest = "/root"
   end
 
   config.vm.define "#{PREFIX}-#{INSTANCE_NAME}" do |master|
-    master.vm.box = "trusty"
     master.vm.host_name = "#{PREFIX}-#{INSTANCE_NAME}"
-    master.vm.network :private_network, ip: "192.168.56.100"
-    #master.vm.network "public_network", :bridge => 'en0: Ethernet (AirPort)'
+    
+    if $provider == 'rackspace'
+      master.vm.box = "dummy"
+      master.ssh.private_key_path = "/root/.ssh/id_rsa"
+    else
+      master.vm.box = "trusty"
+      master.vm.network :private_network, ip: "192.168.56.100"
+    end
 
     # install salt-master, salt-minon    
     master.vm.provision :salt do |salt|
@@ -58,17 +55,17 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # disable StrictHostKeyChecking for github
     master.vm.provision "file",
       source: "etc/ssh-config",
-      destination: "~/.ssh/config"
+      destination: "#{$dest}/.ssh/config"
 
     # copy my private key so I can checkout from private repo
     master.vm.provision "file", 
       source: "#{HOME}/.ssh/id_rsa", 
-      destination: "~/.ssh/id_rsa"
+      destination: "#{$dest}/.ssh/id_rsa"
 
     # copy my public key
     master.vm.provision "file", 
       source: "#{HOME}/.ssh/id_rsa.pub",
-      destination: "~/.ssh/id_rsa.pub"
+      destination: "#{$dest}/.ssh/id_rsa.pub"
 
     # various actions to get ready for masterless minion execution
     #master.vm.provision "shell", path: "scripts/provision.sh", privileged: false
