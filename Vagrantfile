@@ -10,6 +10,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provider "virtualbox" do |v|
     v.gui = false
+    override.vm.box = "trusty"
     $dest = "~"
   end
 
@@ -20,7 +21,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     rs.image           = /Ubuntu/
     rs.rackspace_region= :iad
     rs.public_key_path = "/root/.ssh/id_rsa.pub"
-    $provider = 'rackspace'
+    override.vm.box = "dummy"
     $dest = "/root"
   end
 

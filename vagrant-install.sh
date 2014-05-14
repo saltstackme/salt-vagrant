@@ -4,8 +4,8 @@
 # creating the server
 
 VAGRANT_SERVER="ip address here"
-KEYS_FOLDER = "folder where id_rsa(pub) are"
-HOME="home folder"
+CURRENT_HOME="folder where id_rsa(pub) are"
+VAGRANT_HOME="home folder on vagrant server"
 PREFIX="your initials?"
 INSTANCE_NAME="salt-mastet maybe?"
 GITHUB_USERNAME="username"
@@ -17,10 +17,11 @@ RACKSPACE_REGION="iad maybe?"
 echo "VAGRANT_SERVER IP ADDRESS: $VAGRANT_SERVER"
 
 echo "Fisrt SSH access"
+sed -i -e  "/${VAGRANT_SERVER}/d" ${CURRENT_HOME}/.ssh/known_hosts
 ssh root@${VAGRANT_SERVER} exit
 
 echo "\nCopying SSH keys\n---------------"
-scp ${HOME}/.ssh/id_rsa* root@${VAGRANT_SERVER}:/root/.ssh/
+scp ${CURRENT_HOME}/.ssh/id_rsa* root@${VAGRANT_SERVER}:/root/.ssh/
 
 echo "\nInstalling Vagrant\n-------------"
 ssh root@${VAGRANT_SERVER} <<EOF
@@ -51,7 +52,7 @@ git clone https://github.com/ozgurakan/salt-vagrant.git /root/vagrant
 
 cat <<CONFIGEOF > "/root/vagrant/config.rb"
 # sandbox specific variables
-HOME = "${HOME}"
+HOME = "${VAGRANT_HOME}"
 PREFIX = "${PREFIX}"
 GITHUB_USERNAME = "${GITHUB_USERNAME}"
 GITHUB_EMAIL = "${GITHUB_EMAIL}"
