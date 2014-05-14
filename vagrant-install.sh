@@ -15,6 +15,9 @@ RACKSPACE_REGION="iad maybe?"
 
 echo "VAGRANT_SERVER IP ADDRESS: $VAGRANT_SERVER"
 
+echo "Fisrt SSH access"
+ssh root@${VAGRANT_SERVER} exit
+
 echo "\nCopying SSH keys\n---------------"
 scp ${HOME}/.ssh/id_rsa* root@${VAGRANT_SERVER}:/root/.ssh/
 

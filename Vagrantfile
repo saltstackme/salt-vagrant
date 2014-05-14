@@ -7,9 +7,29 @@ require_relative 'config'
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+
+  if ARGV[1] == 'rackspace'
+      ARGV.delete_at(1)
+      provider = 'rackspace'
+  else
+      provider = 'virtualbox'
+  end
   
   config.vm.provider "virtualbox" do |v|
     v.gui = false
+  end
+
+  config.vm.provider :rackspace do |rs|
+    rs.username        = "#{RACKSPACE_USER}"
+    rs.api_key         = "#{RACKSPACE_KEY}"
+    rs.flavor          = /1 GB Performance/
+    rs.image           = /Ubuntu/
+    rs.rackspace_region= :iad
+    rs.public_key_path = "/root/.ssh/id_rsa.pub"
+  end
+
+  if provider == 'rackspace'
+    config.ssh.private_key_path = "/root/.ssh/id_rsa"
   end
 
   config.vm.define "#{PREFIX}-#{INSTANCE_NAME}" do |master|
