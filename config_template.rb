@@ -4,6 +4,9 @@
 # and fill out the values
 #
 
+# provider, virtualbox or rackspace
+PROVIDER = "virtualbox"
+
 # home folder for on host to copy 
 # private and public keys to sandbox
 HOME = "/home/myuser"
