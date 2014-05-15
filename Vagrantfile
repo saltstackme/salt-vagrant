@@ -33,7 +33,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.define "#{PREFIX}-#{INSTANCE_NAME}" do |master|
     master.vm.host_name = "#{PREFIX}-#{INSTANCE_NAME}"
     
-    #master.vm.network :private_network, ip: "192.168.56.100"
+    if PROVIDER == "virtualbox"
+      master.vm.network :private_network, ip: "192.168.56.100"
+    end
 
     # install salt-master, salt-minon    
     master.vm.provision :salt do |salt|
