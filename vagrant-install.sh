@@ -3,8 +3,8 @@
 # you can pass your publix key while
 # creating the server
 
-VAGRANT_SERVER="ip address here"
 PROVIDER="rackspace or virtualbox"
+VAGRANT_SERVER="ip address here"
 CURRENT_HOME="folder where id_rsa(pub) are"
 VAGRANT_HOME="home folder on vagrant server"
 PREFIX="your initials?"
@@ -72,6 +72,18 @@ echo == Logging into VAgrant Server: $VAGRANT_SERVER
 echo
 EOF
 
-ssh root@${VAGRANT_SERVER}
+# provisioning salt-master
+echo "\n== Provisioning ${PREFIX}-${INSTANCE_NAME}--"
+ssh root@${VAGRANT_SERVER} <<MASTEREOF
+cd /root/vagrant
+vagrant up ${PREFIX}-${INSTANCE_NAME} --provider=rackspace
+vagrant ssh ${PREFIX}-${INSTANCE_NAME}
+/etc/init.d/salt-master stop
+/etc/init.d/salt-minion stop
+/etc/init.d/salt-master start
+/etc/init.d/salt-minion start
+sleep 10
+salt-call network.ipaddrs eth0
+MASTEREOF
 
 
