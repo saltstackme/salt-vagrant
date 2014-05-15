@@ -15,7 +15,7 @@ HOME = "/home/myuser"
 # if vagrant is going to be used to provision cloud servers
 # USERNAME has to be unique under the same cloud account
 # to prevent possible name collusions
-USERNAME = ""
+PREFIX = ""
 
 # username to use for commits
 GITHUB_USERNAME = ""
@@ -25,5 +25,4 @@ GITHUB_EMAIL = ""
 
 # sandbox instance name
 INSTANCE_NAME = "master1"
-
 
