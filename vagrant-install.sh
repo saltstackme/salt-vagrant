@@ -52,7 +52,7 @@ echo
 echo == Configuring Vagrant Environment
 rm -rf /root/vagrant
 mkdir /root/vagrant
-git clone https://github.com/ozgurakan/salt-vagrant.git /root/vagrant
+git clone https://github.com/saltstackme/salt-vagrant.git /root/vagrant
 
 cat <<CONFIGEOF > "/root/vagrant/config.rb"
 # sandbox specific variables
