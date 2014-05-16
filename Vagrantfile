@@ -10,24 +10,24 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   if PROVIDER == "rackspace"
     DEST = "/root"
+
+    config.vm.provider :rackspace do |rs, override|
+      rs.username        = "#{RACKSPACE_USER}"
+      rs.api_key         = "#{RACKSPACE_KEY}"
+      rs.flavor          = /1 GB Performance/
+      rs.image           = /Ubuntu/
+      rs.rackspace_region= :iad
+      rs.public_key_path = "/root/.ssh/id_rsa.pub"
+      override.vm.box = "dummy"
+      override.ssh.private_key_path = "/root/.ssh/id_rsa"
+    end
   else
     DEST = "~"
-  end
 
-  config.vm.provider "virtualbox" do |v, override|
-    v.gui = false
-    override.vm.box = "trusty"
-  end
-
-  config.vm.provider :rackspace do |rs, override|
-    rs.username        = "#{RACKSPACE_USER}"
-    rs.api_key         = "#{RACKSPACE_KEY}"
-    rs.flavor          = /1 GB Performance/
-    rs.image           = /Ubuntu/
-    rs.rackspace_region= :iad
-    rs.public_key_path = "/root/.ssh/id_rsa.pub"
-    override.vm.box = "dummy"
-    override.ssh.private_key_path = "/root/.ssh/id_rsa"
+    config.vm.provider "virtualbox" do |v, override|
+      v.gui = false
+      override.vm.box = "trusty"
+    end    
   end
 
   config.vm.define "#{PREFIX}-#{INSTANCE_NAME}" do |master|
