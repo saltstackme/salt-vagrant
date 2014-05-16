@@ -1,6 +1,6 @@
 # assumption: you have a server on the cloud 
 # that you can login as root without password
-# you can pass your publix key while
+# you can pass your public key while
 # creating the server
 
 PROVIDER="rackspace or virtualbox"
@@ -8,9 +8,12 @@ VAGRANT_SERVER="ip address here"
 CURRENT_HOME="folder where id_rsa(pub) are"
 VAGRANT_HOME="home folder on vagrant server"
 PREFIX="your initials?"
-INSTANCE_NAME="salt-mastet maybe?"
+INSTANCE_NAME="salt-master maybe?"
 GITHUB_USERNAME="username"
 GITHUB_EMAIL="e-mail"
+
+# rackspace provider specific
+# leave empty if you use virtualbox
 RACKSPACE_USER="user that can create servers"
 RACKSPACE_KEY="long key"
 RACKSPACE_REGION="iad maybe?"
