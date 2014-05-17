@@ -18,17 +18,54 @@ RACKSPACE_USER="user that can create servers"
 RACKSPACE_KEY="long key"
 RACKSPACE_REGION="iad maybe?"
 
-echo "VAGRANT_SERVER IP ADDRESS: $VAGRANT_SERVER"
+if [ $VAGRANT_SERVER = "local" ]
+    then
 
-echo "Fisrt SSH access"
-sed -i -e  "/${VAGRANT_SERVER}/d" ${CURRENT_HOME}/.ssh/known_hosts
-ssh root@${VAGRANT_SERVER} exit
+    echo
+    echo == Configuring Vagrant Environment
+    rm -rf ./${PREFIX}-vagrant
+    mkdir ./${PREFIX}-vagrant
+    git clone https://github.com/saltstackme/salt-vagrant.git ./${PREFIX}-vagrant
 
-echo "\nCopying SSH keys\n---------------"
-scp ${CURRENT_HOME}/.ssh/id_rsa* root@${VAGRANT_SERVER}:/root/.ssh/
+    cat <<CONFIGEOF > "./${PREFIX}-vagrant/config.rb"
+# sandbox specific variables
+PROVIDER = "${PROVIDER}"
+HOME = "${VAGRANT_HOME}"
+PREFIX = "${PREFIX}"
+GITHUB_USERNAME = "${GITHUB_USERNAME}"
+GITHUB_EMAIL = "${GITHUB_EMAIL}"
+INSTANCE_NAME = "${INSTANCE_NAME}"
+RACKSPACE_USER = "${RACKSPACE_USER}"
+RACKSPACE_KEY = "${RACKSPACE_KEY}"
+RACKSPACE_REGION = "${RACKSPACE_REGION}"
+CONFIGEOF
 
-echo "\nInstalling Vagrant\n-------------"
-ssh root@${VAGRANT_SERVER} <<EOF
+    if [ "$(vagrant box list | grep trusty)" ]
+    then
+        echo Image trusty exits
+    else
+        vagrant box add trusty https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box
+    fi
+
+    # provisioning salt-master
+    echo "\n== Provisioning ${PREFIX}-${INSTANCE_NAME}--"
+    cd ./${PREFIX}-vagrant
+    vagrant up ${PREFIX}-${INSTANCE_NAME}
+    vagrant ssh ${PREFIX}-${INSTANCE_NAME}
+
+else
+
+    echo "VAGRANT_SERVER IP ADDRESS: $VAGRANT_SERVER"
+
+    echo "== Fisrt SSH access"
+    sed -i -e  "/${VAGRANT_SERVER}/d" ${CURRENT_HOME}/.ssh/known_hosts
+    ssh root@${VAGRANT_SERVER} exit
+
+    echo "\n== Copying SSH keys\n---------------"
+    scp ${CURRENT_HOME}/.ssh/id_rsa* root@${VAGRANT_SERVER}:/root/.ssh/
+
+    echo "\n== Installing Vagrant\n-------------"
+    ssh root@${VAGRANT_SERVER} <<EOF
 echo
 echo == Updating repo
 apt-get update
@@ -71,13 +108,13 @@ cd /root/vagrant
 vagrant box add dummy https://github.com/mitchellh/vagrant-rackspace/raw/master/dummy.box
 
 echo
-echo == Logging into VAgrant Server: $VAGRANT_SERVER
+echo == Logging into Vagrant Server: $VAGRANT_SERVER
 echo
 EOF
 
-# provisioning salt-master
-echo "\n== Provisioning ${PREFIX}-${INSTANCE_NAME}--"
-ssh root@${VAGRANT_SERVER} <<MASTEREOF
+    # provisioning salt-master
+    echo "\n== Provisioning ${PREFIX}-${INSTANCE_NAME}--"
+    ssh root@${VAGRANT_SERVER} <<MASTEREOF
 cd /root/vagrant
 vagrant up ${PREFIX}-${INSTANCE_NAME} --provider=rackspace
 vagrant ssh ${PREFIX}-${INSTANCE_NAME}
@@ -89,4 +126,4 @@ sleep 10
 salt-call network.ipaddrs eth0
 MASTEREOF
 
-
+fi
