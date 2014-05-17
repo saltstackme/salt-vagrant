@@ -5,8 +5,6 @@
 
 PROVIDER="rackspace or virtualbox"
 VAGRANT_SERVER="ip address here"
-CURRENT_HOME="folder where id_rsa(pub) are"
-VAGRANT_HOME="home folder on vagrant server"
 PREFIX="your initials?"
 INSTANCE_NAME="salt-master maybe?"
 GITHUB_USERNAME="username"
@@ -18,7 +16,7 @@ RACKSPACE_USER="user that can create servers"
 RACKSPACE_KEY="long key"
 RACKSPACE_REGION="iad maybe?"
 
-if [ $VAGRANT_SERVER = "local" ]
+if [ $VAGRANT_SERVER = "localhost" ]
     then
 
     echo
@@ -30,7 +28,7 @@ if [ $VAGRANT_SERVER = "local" ]
     cat <<CONFIGEOF > "./${PREFIX}-vagrant/config.rb"
 # sandbox specific variables
 PROVIDER = "${PROVIDER}"
-HOME = "${VAGRANT_HOME}"
+HOME = "~/"
 PREFIX = "${PREFIX}"
 GITHUB_USERNAME = "${GITHUB_USERNAME}"
 GITHUB_EMAIL = "${GITHUB_EMAIL}"
@@ -53,16 +51,16 @@ CONFIGEOF
     vagrant up ${PREFIX}-${INSTANCE_NAME}
     vagrant ssh ${PREFIX}-${INSTANCE_NAME}
 
-else
+else # if not local, so remote
 
     echo "VAGRANT_SERVER IP ADDRESS: $VAGRANT_SERVER"
 
     echo "== Fisrt SSH access"
-    sed -i -e  "/${VAGRANT_SERVER}/d" ${CURRENT_HOME}/.ssh/known_hosts
+    sed -i -e  "/${VAGRANT_SERVER}/d" ~/.ssh/known_hosts
     ssh root@${VAGRANT_SERVER} exit
 
     echo "\n== Copying SSH keys\n---------------"
-    scp ${CURRENT_HOME}/.ssh/id_rsa* root@${VAGRANT_SERVER}:/root/.ssh/
+    scp ~/.ssh/id_rsa* root@${VAGRANT_SERVER}:/root/.ssh/
 
     echo "\n== Installing Vagrant\n-------------"
     ssh root@${VAGRANT_SERVER} <<EOF
@@ -94,7 +92,7 @@ git clone https://github.com/saltstackme/salt-vagrant.git /root/vagrant
 cat <<CONFIGEOF > "/root/vagrant/config.rb"
 # sandbox specific variables
 PROVIDER = "${PROVIDER}"
-HOME = "${VAGRANT_HOME}"
+HOME = "/root"
 PREFIX = "${PREFIX}"
 GITHUB_USERNAME = "${GITHUB_USERNAME}"
 GITHUB_EMAIL = "${GITHUB_EMAIL}"
