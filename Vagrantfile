@@ -95,20 +95,4 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     master.vm.provision "shell", inline: "salt-call --local -c /tmp/salt state.highstate"
 
   end
-
-  config.vm.define "saltmaster" do |minion|    
-    minion.vm.box = "trusty"
-    minion.vm.host_name = "saltmaster"
-    minion.vm.network :private_network, ip: "192.168.56.102"
-    #minion.vm.network "public_network", :bridge => 'en0: Ethernet (AirPort)'
-    minion.vm.provision :salt do |salt|
-      salt.run_highstate = true
-
-      salt.minion_config = "./salt/minion"
-
-      salt.minion_key = "./salt/minion.pem"
-      salt.minion_pub = "./salt/minion.pub"
-    end 
-  end  
-
 end
