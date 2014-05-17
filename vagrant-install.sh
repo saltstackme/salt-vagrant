@@ -4,7 +4,7 @@
 # creating the server
 
 PROVIDER="rackspace or virtualbox"
-VAGRANT_SERVER="ip address here"
+VAGRANT_SERVER="ip address here or localhost"
 PREFIX="your initials?"
 INSTANCE_NAME="salt-master maybe?"
 GITHUB_USERNAME="username"
