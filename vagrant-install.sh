@@ -65,23 +65,14 @@ else # if not local, so remote
     echo "\n== Installing Vagrant\n-------------"
     ssh root@${VAGRANT_SERVER} <<EOF
 echo
-echo == Updating repo
-apt-get update
-
-echo
-echo == Installing required libraries
-apt-get install ruby-dev build-essential automake libtool emacs24-nox git screen -y
-
-echo
 echo == Installing Vagrant
+apt-get update
+apt-get install ruby-dev build-essential automake libtool emacs24-nox git screen -y
 apt-get install vagrant -y
 
 echo
 echo == Installing rackspace plugin, this may take a while
 vagrant plugin install vagrant-rackspace
-
-echo
-echo == Installation Complete
 
 echo
 echo == Configuring Vagrant Environment
