@@ -55,7 +55,7 @@ else # if not local, so remote
 
     echo "VAGRANT_SERVER IP ADDRESS: $VAGRANT_SERVER"
 
-    echo "== Fisrt SSH access"
+    echo "== First SSH access"
     sed -i -e  "/${VAGRANT_SERVER}/d" ~/.ssh/known_hosts
     ssh root@${VAGRANT_SERVER} exit
 
