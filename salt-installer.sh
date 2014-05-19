@@ -14,7 +14,9 @@ GITHUB_EMAIL="e-mail"
 # leave empty if you use virtualbox
 RACKSPACE_USER="user that can create servers"
 RACKSPACE_KEY="long key"
+RACKSPACE_ACCOUNT="account number"
 RACKSPACE_REGION="iad maybe?"
+RACKSPACE_SSH_PUBLIC_KEY="name of public key for RACKSPACE_USER"
 
 if [ $VAGRANT_SERVER = "localhost" ]
     then
