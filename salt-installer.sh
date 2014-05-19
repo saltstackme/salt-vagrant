@@ -53,17 +53,63 @@ CONFIGEOF
 
 else # if not local, so remote
 
+    # get token
+    TOKEN=`curl -s https://identity.api.rackspacecloud.com/v2.0/tokens -X 'POST' -d '{"auth":{"RAX-\
+KSKEY:apiKeyCredentials":{"username":"'$RACKSPACE_USER'", "apiKey":"'$RACKSPACE_KEY'"}}}' -H "Content-Type: application/json" \
+| python -c "import sys,json;print json.loads(sys.stdin.readlines()[0])['access']['token']['id']"`
+
+    cat <<EOFJSON > server_build.json
+{
+    "server" : {
+        "name" : "${PREFIX}-vagrant",
+        "imageRef" : "5cc098a5-7286-4b96-b3a2-49f4c4f82537",
+        "flavorRef" : "performance1-2",
+        "metadata" : {
+            "My Server Name" : "Vagrant Temporary Server"
+        },
+        "key_name": "${RACKSPACE_SSH_PUBLIC_KEY}"
+    }
+}
+EOFJSON
+
+    # create server
+    INSTANCE_ID=`curl -s https://${RACKSPACE_REGION}.servers.api.rackspacecloud.com/v2/$RACKSPACE_ACCOUNT/servers \
+       -X POST \
+       -H "Content-Type: application/json" \
+       -H "X-Auth-Token: $TOKEN" \
+       -H "X-Auth-Project-Id: test-project" \
+       -T server_build.json | python -c "import sys,json;print json.loads(sys.stdin.readlines()[0])['server']['id']"`
+
+    STATUS="INITIATED"
+
+    while [ "$STATUS" != "ACTIVE" ]
+    do
+        echo "Waiting for instance to boot up, status : $STATUS"
+        sleep 5
+        STATUS=`curl -s https://${RACKSPACE_REGION}.servers.api.rackspacecloud.com/v2/$RACKSPACE_ACCOUNT/servers/$INSTANCE_ID \
+           -H "X-Auth-Token: $TOKEN" | python -c "import sys,json;print json.loads(sys.stdin.readlines()[0])['server']['status']"`
+    done
+
+    echo "Server ready"
+    sleep 5
+
+    INSTANCE_IP=`curl -s https://${RACKSPACE_REGION}.servers.api.rackspacecloud.com/v2/$RACKSPACE_ACCOUNT/servers/$INSTANCE_ID \
+           -H "X-Auth-Token: $TOKEN" | python -c "import sys,json;print json.loads(sys.stdin.readlines()[0])['server']['accessIPv4']"`
+
+    echo $INSTANCE_IP
+    VAGRANT_SERVER=$INSTANCE_IP
+
     echo "VAGRANT_SERVER IP ADDRESS: $VAGRANT_SERVER"
 
     echo "== First SSH access"
     sed -i -e  "/${VAGRANT_SERVER}/d" ~/.ssh/known_hosts
-    ssh root@${VAGRANT_SERVER} exit
+    ssh -o "StrictHostKeyChecking no" root@${VAGRANT_SERVER} exit
 
     echo "\n== Copying SSH keys\n---------------"
-    scp ~/.ssh/id_rsa* root@${VAGRANT_SERVER}:/root/.ssh/
+    scp -o "StrictHostKeyChecking no" ~/.ssh/id_rsa* root@${VAGRANT_SERVER}:/root/.ssh/
 
     echo "\n== Installing Vagrant\n-------------"
-    ssh root@${VAGRANT_SERVER} <<EOF
+    ssh -o "StrictHostKeyChecking no" root@${VAGRANT_SERVER} <<EOF
 echo
 echo == Installing Vagrant
 apt-get update
@@ -103,7 +149,7 @@ EOF
 
     # provisioning salt-master
     echo "\n== Provisioning ${PREFIX}-${INSTANCE_NAME}--"
-    ssh root@${VAGRANT_SERVER} <<MASTEREOF
+    ssh -o "StrictHostKeyChecking no" root@${VAGRANT_SERVER} <<MASTEREOF
 cd /root/vagrant
 vagrant up ${PREFIX}-${INSTANCE_NAME} --provider=rackspace
 vagrant ssh ${PREFIX}-${INSTANCE_NAME}
@@ -113,6 +159,12 @@ vagrant ssh ${PREFIX}-${INSTANCE_NAME}
 /etc/init.d/salt-minion start
 sleep 10
 salt-call network.ipaddrs eth0
+exit
 MASTEREOF
+
+echo == Deleting Vagrant Server
+curl -i https://${RACKSPACE_REGION}.servers.api.rackspacecloud.com/v2/$RACKSPACE_ACCOUNT/servers/$INSTANCE_ID \
+       -X DELETE \
+       -H "X-Auth-Token: $TOKEN"
 
 fi
