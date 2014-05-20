@@ -165,7 +165,7 @@ exit
 MASTEREOF
 
 echo == Deleting Vagrant Server
-DELETE_VAGRANT=`curl -i https://${RACKSPACE_REGION}.servers.api.rackspacecloud.com/v2/$RACKSPACE_ACCOUNT/servers/$INSTANCE_ID \
+DELETE_VAGRANT=`curl -s https://${RACKSPACE_REGION}.servers.api.rackspacecloud.com/v2/$RACKSPACE_ACCOUNT/servers/$INSTANCE_ID \
        -X DELETE \
        -H "X-Auth-Token: $TOKEN"`
 echo == Done
