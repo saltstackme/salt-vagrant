@@ -98,14 +98,11 @@ EOFJSON
     INSTANCE_IP=`curl -s https://${RACKSPACE_REGION}.servers.api.rackspacecloud.com/v2/$RACKSPACE_ACCOUNT/servers/$INSTANCE_ID \
            -H "X-Auth-Token: $TOKEN" | python -c "import sys,json;print json.loads(sys.stdin.readlines()[0])['server']['accessIPv4']"`
 
-    echo $INSTANCE_IP
     VAGRANT_SERVER=$INSTANCE_IP
-
     echo "VAGRANT_SERVER IP ADDRESS: $VAGRANT_SERVER"
-
-    echo "== First SSH access"
+   
     sed -i -e  "/${VAGRANT_SERVER}/d" ~/.ssh/known_hosts
-    ssh -o "StrictHostKeyChecking no" root@${VAGRANT_SERVER} exit
+    #ssh -o "StrictHostKeyChecking no" root@${VAGRANT_SERVER} exit
 
     echo "\n== Copying SSH keys\n---------------"
     scp -o "StrictHostKeyChecking no" ~/.ssh/id_rsa* root@${VAGRANT_SERVER}:/root/.ssh/
@@ -160,7 +157,10 @@ vagrant ssh ${PREFIX}-${INSTANCE_NAME}
 /etc/init.d/salt-master start
 /etc/init.d/salt-minion start
 sleep 10
-salt-call network.ipaddrs eth0
+echo =============================================================
+echo Login to ${PREFIX}-${INSTANCE_NAME} with the IP address below
+salt-call network.ipaddrs eth0 | python -c "import sys,yaml;print yaml.load(sys.stdin.readlines()[1])[0]"
+echo =============================================================
 exit
 MASTEREOF
 
