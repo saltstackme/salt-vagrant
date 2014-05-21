@@ -51,7 +51,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       salt.minion_pub = "salt/minion.pub"
 
       salt.master_key = "salt/master.pem"
-      salt.master_pub = "salt/master.pub"      
+      salt.master_pub = "salt/master.pub"
     end
 
     # disable StrictHostKeyChecking for github
