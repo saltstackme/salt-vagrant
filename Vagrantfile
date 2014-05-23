@@ -93,6 +93,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # run salt-sandbox formulas to configure salt-master
     master.vm.provision "shell", inline: "salt-call --local -c /tmp/salt state.highstate"
+     master.vm.provision "shell", inline: 'salt-call --local -c /tmp/salt cloud_config.rackspace "${PROVIDER_PREFIX}" "${PROVIDER_USLON}" "#{RACKSPACE_USER}" "#{RACKSPACE_KEY}" "#{RACKSPACE_ACCOUNT}" "${PROVIDER_IMAGES}"'
 
   end
 end
