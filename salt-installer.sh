@@ -17,9 +17,9 @@ RACKSPACE_KEY="long key"
 RACKSPACE_ACCOUNT="account number"
 RACKSPACE_REGION="iad maybe?"
 RACKSPACE_SSH_PUBLIC_KEY="name of public key for RACKSPACE_USER"
-RACKPSACE_USLON = "us or lon, us is used for anywhere except lon"
-PROVIDER_PREFIX = "salt cloud provider/profile prefix"
-PROVIDER_IMAGES = "ubuntu, centos"
+RACKPSACE_USLON="us or lon, us is used for anywhere except lon"
+PROVIDER_PREFIX="salt cloud provider/profile prefix"
+PROVIDER_IMAGES="ubuntu, centos"
 
 if [ $VAGRANT_SERVER = "localhost" ]
     then
