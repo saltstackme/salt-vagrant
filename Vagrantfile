@@ -95,7 +95,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     master.vm.provision "shell", inline: "salt-call --local -c /tmp/salt state.highstate"
     master.vm.provision "shell" do |s|
       s.inline = "salt-call --local -c /tmp/salt cloud_config.rackspace $1 $2 $3 $4 $5 $6"
-      s.args = ["prod-queues", "us", "#{RACKSPACE_USER}", "#{RACKSPACE_KEY}", "#{RACKSPACE_ACCOUNT}", "${PROVIDER_IMAGES}"]
+      s.args = ["prod-queues", "us", "#{RACKSPACE_USER}", "#{RACKSPACE_KEY}", "#{RACKSPACE_ACCOUNT}", "#{PROVIDER_IMAGES}"]
     end
     
   end
