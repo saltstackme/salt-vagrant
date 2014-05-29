@@ -19,6 +19,7 @@ RACKSPACE_REGION="iad maybe?"
 RACKSPACE_SSH_PUBLIC_KEY="name of public key for RACKSPACE_USER"
 PROVIDER_PREFIX="salt cloud provider/profile prefix"
 PROVIDER_IMAGES="ubuntu,centos (comma sperated string)"
+REPO="your fork, ssh url so you can push"
 
 if [ $VAGRANT_SERVER = "localhost" ]
     then

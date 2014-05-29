@@ -80,6 +80,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # clone salt-sandbox environment
     master.vm.provision "shell", inline: "git clone https://github.com/saltstackme/salt-sandbox.git /srv/salt-sandbox", privileged: false
 
+    # clone given forked repo environment
+    master.vm.provision "shell", inline: "git clone #{REPO} /srv/salt", privileged: false
+
     # set github username
     master.vm.provision "shell", inline: "git config --global user.name #{GITHUB_USERNAME}", privileged: false
 
