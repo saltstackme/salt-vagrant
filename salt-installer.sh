@@ -1,4 +1,8 @@
 
+#################################################
+######## begining of configuration ##############
+#################################################
+
 # you can create your salt-master
 # locally or on rackspace public cloud
 # values are: rackspace | virtualbox
@@ -23,6 +27,8 @@ INSTANCE_NAME="salt-master"
 # github information, so you can push code
 GITHUB_USERNAME="username"
 GITHUB_EMAIL="e-mail"
+
+########### cloud specific section ############
 
 # rackspace provider specific
 # leave empty if you use virtualbox
@@ -49,6 +55,10 @@ PROVIDER_IMAGES="ubuntu,centos"
 # ssh url for your fork, example below
 REPO="git@github.com:saltstackme/salt-sandbox.git"
 
+#################################################
+######## end of configuration ###################
+#################################################
+
 if [ $VAGRANT_SERVER = "localhost" ]
     then
 
@@ -70,6 +80,7 @@ RACKSPACE_USER = "${RACKSPACE_USER}"
 RACKSPACE_KEY = "${RACKSPACE_KEY}"
 RACKSPACE_ACCOUNT = "${RACKSPACE_ACCOUNT}"
 RACKSPACE_REGION = "${RACKSPACE_REGION}"
+REPO = "${REPO}"
 CONFIGEOF
 
     if [ "$(vagrant box list | grep trusty)" ]
@@ -171,6 +182,7 @@ RACKSPACE_ACCOUNT = "${RACKSPACE_ACCOUNT}"
 RACKSPACE_REGION = "${RACKSPACE_REGION}"
 PROVIDER_PREFIX = "${PROVIDER_PREFIX}"
 PROVIDER_IMAGES = "${PROVIDER_IMAGES}"
+REPO = "${REPO}"
 CONFIGEOF
 
 cd /root/vagrant
