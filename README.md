@@ -1,13 +1,15 @@
 salt-vagrant
 ============
 
+This document is not complete yet!!!
+
 ## If (You are doing something like this)
 
-You are using salt to provision / manage your service. You have more than one developer / devops| ops engineer / system admin (how ever you like to call) working on salt formulas. You use github for code management. You also use cloud (IaaS) to test your code.
+You are using salt to provision / manage your service. You have more than one developer / devops | ops engineer / system administrator working on salt formulas. You use github for code management. You also use cloud (IaaS) to test your code.
 
 ## and (you have this problem)
 
-You are actively developing salt formulas and you want to be able to test these without waiting others or without worrying about breaking what other have done. You should do 
+You are actively developing salt formulas and you want to be able to test these without waiting others or without worrying about breaking what other have done. You want to be agile! You should do:
 
 * fork the main repo
 * cofigure / upload your key's to your account so you can pull/push code
@@ -34,15 +36,9 @@ We want this to be so easy that, we won't have to keep any server up longer than
 
 Downlaad "https://raw.githubusercontent.com/saltstackme/salt-vagrant/master/salt-installer.sh"
 
+
 This repo has salt-installer.sh script which installs and configures a salt-master.
 
 * Installs salt-master
 * Copies your ssh public and private keys from your home folder to salt-master:/root/.ssh.
 
-## Install vagrant
-
-## Create Folders
-
-## Checkout salt-vagrant
-
-## Create salt-sandbox
