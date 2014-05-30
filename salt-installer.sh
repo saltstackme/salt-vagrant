@@ -1,12 +1,26 @@
-# assumption: you have a server on the cloud 
-# that you can login as root without password
-# you can pass your public key while
-# creating the server
 
-PROVIDER="rackspace or virtualbox"
-VAGRANT_SERVER="ip address here or localhost"
-PREFIX="your initials?"
-INSTANCE_NAME="salt-master maybe?"
+# you can create your salt-master
+# locally or on rackspace public cloud
+# values are: rackspace | virtualbox
+# example below
+PROVIDER="rackspace"
+
+# you can have a local or remote vagrant server
+# remote vagrant server is destroyed after
+# salt-master is created
+# values are: remote | localhost
+# example below
+VAGRANT_SERVER="remote"
+
+# string to prefix your instances
+# so you can identify them easily
+PREFIX="bla-bug-fix"
+
+# salt-master instance name
+# it will be prefixed with PREFIX above
+INSTANCE_NAME="salt-master"
+
+# github information, so you can push code
 GITHUB_USERNAME="username"
 GITHUB_EMAIL="e-mail"
 
@@ -15,11 +29,25 @@ GITHUB_EMAIL="e-mail"
 RACKSPACE_USER="user that can create servers"
 RACKSPACE_KEY="long key"
 RACKSPACE_ACCOUNT="account number"
-RACKSPACE_REGION="iad maybe?"
+
+# region to use
+# values are: iad | ord | dfw | lon | syd | hkg
+# example below
+RACKSPACE_REGION="iad"
+
 RACKSPACE_SSH_PUBLIC_KEY="name of public key for RACKSPACE_USER"
-PROVIDER_PREFIX="salt cloud provider/profile prefix"
-PROVIDER_IMAGES="ubuntu,centos (comma sperated string)"
-REPO="your fork, ssh url so you can push"
+
+# this will be a prefix for cloud.proviers.d and 
+# cloud.profiles.d IDs, example below
+PROVIDER_PREFIX="auto-test"
+
+# comma separated string
+# images containig one of these will match
+# example below
+PROVIDER_IMAGES="ubuntu,centos"
+
+# ssh url for your fork, example below
+REPO="git@github.com:saltstackme/salt-sandbox.git"
 
 if [ $VAGRANT_SERVER = "localhost" ]
     then
