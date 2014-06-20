@@ -95,9 +95,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       destination: "/tmp/salt/minion"
 
     # run salt-sandbox formulas to configure salt-master
-    master.vm.provision "shell", inline: "salt-call --local -c /tmp/salt state.highstate"
+    master.vm.provision "shell", inline: "salt-call --local -c /tmp/salt state.highstate -l quiet"
     master.vm.provision "shell" do |s|
-      s.inline = "salt-call --local -c /tmp/salt cloud_config.rackspace $1 $2 $3 $4 $5"
+      s.inline = "salt-call --local -c /tmp/salt cloud_config.rackspace $1 $2 $3 $4 $5 -l quiet"
       s.args = ["#{PROVIDER_PREFIX}", "#{RACKSPACE_USER}", "#{RACKSPACE_KEY}", "#{RACKSPACE_ACCOUNT}", "#{PROVIDER_IMAGES}"]
     end
     
