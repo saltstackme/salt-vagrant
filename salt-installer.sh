@@ -208,7 +208,7 @@ vagrant ssh ${PREFIX}-${INSTANCE_NAME}
 sleep 10
 echo =============================================================
 echo Login to ${PREFIX}-${INSTANCE_NAME} with the IP address below
-salt-call network.ipaddrs eth0 | python -c "import sys,yaml;print yaml.load(sys.stdin.readlines()[1])[0]"
+salt-call network.ipaddrs eth0 -l quiet | python -c "import sys,yaml;print yaml.load(sys.stdin.readlines()[1])[0]"
 echo =============================================================
 exit
 MASTEREOF
