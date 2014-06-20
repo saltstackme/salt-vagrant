@@ -156,7 +156,9 @@ echo
 echo == Installing Vagrant
 apt-get update
 apt-get install ruby-dev build-essential automake libtool emacs24-nox git screen -y
-apt-get install vagrant -y
+wget https://dl.bintray.com/mitchellh/vagrant/vagrant_1.6.3_x86_64.deb
+dpkg -i vagrant_1.6.3_x86_64.deb
+#apt-get install vagrant -y
 
 echo
 echo == Installing rackspace plugin, this may take a while

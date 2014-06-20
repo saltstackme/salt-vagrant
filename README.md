@@ -36,8 +36,7 @@ We want this to be so easy that, we won't have to keep any server up longer than
 
 Downlaad "https://raw.githubusercontent.com/saltstackme/salt-vagrant/master/salt-installer.sh"
 
-
-This repo has salt-installer.sh script which installs and configures a salt-master.
+Enter the values for configuration options.
 
 * Installs salt-master
 * Copies your ssh public and private keys from your home folder to salt-master:/root/.ssh.
