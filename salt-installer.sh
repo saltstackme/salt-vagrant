@@ -7,53 +7,55 @@
 # locally or on rackspace public cloud
 # values are: rackspace | virtualbox
 # example below
-PROVIDER="rackspace"
+#PROVIDER="rackspace"
 
 # you can have a local or remote vagrant server
 # remote vagrant server is destroyed after
 # salt-master is created
 # values are: remote | localhost
 # example below
-VAGRANT_SERVER="remote"
+#VAGRANT_SERVER="remote"
 
 # string to prefix your instances
 # so you can identify them easily
-PREFIX="bla-bug-fix"
+#PREFIX="bla-bug-fix"
 
 # salt-master instance name
 # it will be prefixed with PREFIX above
-INSTANCE_NAME="salt-master"
+#INSTANCE_NAME="salt-master"
 
 # github information, so you can push code
-GITHUB_USERNAME="username"
-GITHUB_EMAIL="e-mail"
+#GITHUB_USERNAME="username"
+#GITHUB_EMAIL="e-mail"
 
 ########### cloud specific section ############
 
 # rackspace provider specific
 # leave empty if you use virtualbox
-RACKSPACE_USER="user that can create servers"
-RACKSPACE_KEY="long key"
-RACKSPACE_ACCOUNT="account number"
+#RACKSPACE_USER="user that can create servers"
+#RACKSPACE_KEY="long key"
+#RACKSPACE_ACCOUNT="account number"
 
 # region to use
 # values are: iad | ord | dfw | lon | syd | hkg
 # example below
-RACKSPACE_REGION="iad"
+#RACKSPACE_REGION="iad"
 
-RACKSPACE_SSH_PUBLIC_KEY="name of public key for RACKSPACE_USER"
+# public key name for RACKSPACE_USER that
+# is uploaded to cloud account
+#RACKSPACE_SSH_PUBLIC_KEY="name of public key for RACKSPACE_USER"
 
 # this will be a prefix for cloud.proviers.d and 
 # cloud.profiles.d IDs, example below
-PROVIDER_PREFIX="auto-test"
+#PROVIDER_PREFIX="auto-test"
 
 # comma separated string
 # images containig one of these will match
 # example below
-PROVIDER_IMAGES="ubuntu,centos"
+#PROVIDER_IMAGES="ubuntu,centos"
 
 # ssh url for your fork, example below
-REPO="git@github.com:saltstackme/salt-sandbox.git"
+#REPO="git@github.com:saltstackme/salt-sandbox.git"
 
 #################################################
 ######## end of configuration ###################
