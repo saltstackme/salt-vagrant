@@ -215,6 +215,9 @@ echo =============================================================
 exit
 MASTEREOF
 
+
+######## deleting temporary server(s) #########
+
 echo == Deleting Vagrant Server
 DELETE_VAGRANT=`curl -s https://${RACKSPACE_REGION}.servers.api.rackspacecloud.com/v2/$RACKSPACE_ACCOUNT/servers/$INSTANCE_ID \
        -X DELETE \
