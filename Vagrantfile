@@ -15,7 +15,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       rs.username        = "#{RACKSPACE_USER}"
       rs.api_key         = "#{RACKSPACE_KEY}"
       rs.flavor          = /1 GB Performance/
-      rs.image           = /Ubuntu 14.04 LTS (Trusty Tahr)/
+      rs.image           = "Ubuntu 14.04 LTS (Trusty Tahr)"
       rs.rackspace_region= :iad
       rs.public_key_path = "/root/.ssh/id_rsa.pub"
       override.vm.box = "dummy"
